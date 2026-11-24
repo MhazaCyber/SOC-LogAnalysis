@@ -13,6 +13,9 @@ logs d'authentification Linux, et formuler des recommandations de remédiation.
 Import via Power Query, comptage des tentatives par IP source (DAX), scoring
 de sévérité. Identification d'un pattern de force brute SSH ciblant `root`.
 
+![Tableau Power BI - IP, occurrences et sévérité](screenshots/powerbi-tableau.png)
+
+
 ### 2. Automatisation Python
 - **`analyse_logs.py`** : détection des événements suspects par type
   (`authentication failure`, `invalid user`) → export CSV.
@@ -20,6 +23,10 @@ de sévérité. Identification d'un pattern de force brute SSH ciblant `root`.
 - **`analyse_ip.py`** : extraction des IP sources par regex et classement des
   plus agressives → export CSV.
   **IP la plus active : `150.183.249.110` (80 tentatives).**
+
+![Détection des entrées suspectes - 140 résultats](screenshots/python-detection.png)
+
+![Top des IP sources agressives](screenshots/python-top-ip.png)
 
 ### 3. SIEM — Splunk
 Ingestion du fichier de logs dans Splunk Enterprise, puis analyse via le langage de recherche SPL.
@@ -29,6 +36,25 @@ Ingestion du fichier de logs dans Splunk Enterprise, puis analyse via le langage
 - **Comptage par IP source** : `stats count by rhost` → 47 IP distinctes, dominées par `150.183.249.110` (80 tentatives) — même résultat que l'analyse Python, ce qui valide la cohérence des trois approches.
 - **Corrélation IP × compte ciblé** : `stats count by rhost, user` → confirme que le compte `root` est la cible principale.
 - **Simulation d'une règle de détection** : `where count > 20` → isole les 3 IP qui dépassent le seuil d'alerte.
+
+**Vue Événements — 608 événements correspondants :**
+
+![Splunk vue événements](screenshots/splunk-1-events.png)
+
+**Top des IP sources (statistiques) :**
+
+![Splunk top IP](screenshots/splunk-2-top-ip.png)
+
+![Splunk visualisation camembert](screenshots/splunk-3-camembert.png)
+
+**Corrélation IP × compte ciblé (root) :**
+
+![Splunk IP et user](screenshots/splunk-4-ip-user.png)
+
+**Simulation d'une règle de détection (seuil > 20) :**
+
+![Splunk seuil de détection](screenshots/splunk-5-seuil.png)
+
 
 ## 🎯 Mapping MITRE ATT&CK
 
