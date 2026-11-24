@@ -82,7 +82,7 @@ seuil d'échecs, confirmant les sources à investiguer en priorité.
 ## 🔍 Findings clés
 - Attaque par force brute SSH automatisée, ciblant principalement `root`.
 - Une IP nettement dominante (`150.183.249.110`, 80 tentatives) parmi
-  ~28 IP distinctes → possible attaque distribuée / botnet.
+  ~47 IP distinctes → possible attaque distribuée / botnet.
 
 ## 🛡️ Recommandations
 - Blocage des IP identifiées au pare-feu
