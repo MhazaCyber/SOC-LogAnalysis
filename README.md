@@ -22,6 +22,14 @@ de sévérité. Identification d'un pattern de force brute SSH ciblant `root`.
   **IP la plus active : `150.183.249.110` (80 tentatives).**
 
 ### 3. SIEM — Splunk
+Ingestion du fichier de logs dans Splunk Enterprise, puis analyse via le langage de recherche SPL.
+
+- **Ingestion** : upload de `Linux2k.log`, configuration d'un sourcetype personnalisé (`Linux`) et indexation.
+- **Détection par mots-clés** : 608 événements suspects identifiés (authentication failure, invalid user, Failed password).
+- **Comptage par IP source** : `stats count by rhost` → 47 IP distinctes, dominées par `150.183.249.110` (80 tentatives) — même résultat que l'analyse Python, ce qui valide la cohérence des trois approches.
+- **Corrélation IP × compte ciblé** : `stats count by rhost, user` → confirme que le compte `root` est la cible principale.
+- **Simulation d'une règle de détection** : `where count > 20` → isole les 3 IP qui dépassent le seuil d'alerte.
+
 ## 🎯 Mapping MITRE ATT&CK
 
 Les activités identifiées dans les logs ont été rapprochées du framework
